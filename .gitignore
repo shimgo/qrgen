@@ -1,0 +1,6 @@
+input/*
+!sample.csv
+output/*
+vendor/*
+.bundle
+!.keep
