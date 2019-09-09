@@ -3,6 +3,7 @@ require 'rqrcode_png'
 require 'csv'
 require 'fileutils'
 require 'barby/barcode/code_128'
+require 'barby/barcode/codabar'
 require 'barby/outputter/png_outputter'
 require 'rghost'
 require 'rghost_barcode'
@@ -25,14 +26,14 @@ def saveQR(content, input_base_name = "")
 end
 
 def savecCode128(content, input_base_name = "")
-  codabar = Barby::Code128B.new(content)
-  File.open(File.join(OUTPUT_BASE, input_base_name, "#{content}.png"), 'wb'){|f| f.write codabar.to_png(:height => 25, :margin => 2, dim: 5) }
+  barcode = Barby::Code128B.new(content)
+  File.open(File.join(OUTPUT_BASE, input_base_name, "#{content}.png"), 'wb'){|f| f.write barcode.to_png(:height => 25, :margin => 2, dim: 5) }
+
 end
 
 def saveCodabar(content, input_base_name = "")
-  doc=RGhost::Document.new
-  doc.barcode_rationalizedCodabar("B#{content}D",{:text=>{:size=>8}, :enable=>[:text]})
-  doc.render :pdf, :resolution => 300, :filename => File.join(OUTPUT_BASE, input_base_name, "#{content}.pdf")
+  barcode = Barby::Codabar.new("B#{content}D")
+  File.open(File.join(OUTPUT_BASE, input_base_name, "#{content}.png"), 'wb'){|f| f.write barcode.to_png(:height => 25, :margin => 2, dim: 5) }
 end
 
 CSV.foreach(file_path) do |row|
